@@ -4,12 +4,12 @@
 
 #ifndef EASYLCDMENU_COMMANDMENUITEM_HPP
 #define EASYLCDMENU_COMMANDMENUITEM_HPP
-#include "NumberMenuItem.hpp"
+#include "MenuItem.hpp"
 
 class CommandMenuItem : public MenuItem<double> {
 public:
     void render();
-    void change(EasyLCDMenuControl control);
+    void navigate(EasyLCDMenuNavigation navigation);
 protected:
     EasyLCDMenuFunction callback;
 
