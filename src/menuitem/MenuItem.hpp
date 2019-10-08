@@ -5,7 +5,7 @@
 #ifndef EASYLCDMENU_MENUITEM_H
 #define EASYLCDMENU_MENUITEM_H
 
-#include <../Menu.hpp>
+#include "../Menu.hpp"
 #include "common.h"
 
 template<typename T>

@@ -12,20 +12,20 @@ const char * EasyLCDMenuFalse   = "Off";
 
 typedef void (*EasyLCDMenuFunction)();
 
-enum EasyLCDMenuNavigation {
+enum typedef {
     UP,
     DOWN,
     LEFT,
     RIGHT,
     SELECT,
-};
+} EasyLCDMenuNavigation;
 
-enum EasyLCDMenuControl {
+enum typedef {
     NEXT,
     PREVIOUS,
     APPROVE,
     LEAVE
-};
+} EasyLCDMenuControl;
 
 
 #endif //EASYLCDMENU_COMMON_H
