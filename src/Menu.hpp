@@ -5,29 +5,39 @@
 #ifndef EASYLCDMENU_MENU_HPP
 #define EASYLCDMENU_MENU_HPP
 
-#include "common.h"
-#include "menuitem/MenuItem.hpp"
+#include "common.hpp"
+#include "MenuRenderer.h"
 
 class Menu {
 public:
-    void home(EasyLCDMenuFunction cb);
-
+    Menu();
+    Menu(uint8_t rows, uint8_t columns);
+    void begin(LCD *lcd);
+    void onHome(EasyLCDMenuFunction cb);
+    void home();
     void enter();
-
     void setActiveMenuItem(MenuItem *menuItem);
-
     void setRootMenuItem(MenuItem *menuItem);
+    void next();
+    void previous();
+    void go();
+    void back();
+    void navigate(EasyLCDMenuControl control);
+    LCD* getLcd();
+    void render();
+    void setRows(uint8_t rows);
+    uint8_t getRows();
+    void setColumns(uint8_t _columns);
+    uint8_t getColumns();
 
-    void up();
-    void down();
-    void left();
-    void right();
-    void select();
-    void navigate(EasyLCDMenuNavigation control);
-
+    MenuRenderer* getRenderer();
 protected:
-    MenuItem *rootMenuItem   = nullptr;
-    MenuItem *activeMenuItem = nullptr;
+    LCD* _lcd;
+    MenuRenderer        *_renderer;
+    EasyLCDMenuFunction homeCallback = nullptr;
+    MenuItem            *rootMenuItem   = nullptr;
+    MenuItem            *activeMenuItem = nullptr;
+    uint8_t             _rows, _columns;
 };
 
 

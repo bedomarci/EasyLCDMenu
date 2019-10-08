@@ -4,14 +4,47 @@
 
 #ifndef EASYLCDMENU_COMMANDMENUITEM_HPP
 #define EASYLCDMENU_COMMANDMENUITEM_HPP
-#include "MenuItem.hpp"
+#include "ValueMenuItemTemplate.hpp"
 
-class CommandMenuItem : public MenuItem<double> {
+class CommandMenuItem : public ValueMenuItemTemplate<uint8_t> {
 public:
-    void render();
-    void navigate(EasyLCDMenuNavigation navigation);
+    CommandMenuItem(uint8_t *value, const char *label);
+    virtual void navigate(EasyLCDMenuControl control);
+    void setCallback(EasyLCDMenuFunction cb);
 protected:
-    EasyLCDMenuFunction callback;
-
+    EasyLCDMenuFunction _callback = nullptr;
+    void toString(char *valueString);
+    uint8_t getStringLength();
 };
+
+void CommandMenuItem::navigate(EasyLCDMenuControl control) {
+    switch (control) {
+        case GO:
+            if (_callback) {
+                _callback();
+                this->menu->home();
+            }
+        break;
+        case BACK:
+            this->leave();
+        break;
+    }
+}
+
+void CommandMenuItem::setCallback(EasyLCDMenuFunction cb) {
+    _callback = cb;
+}
+
+void CommandMenuItem::toString(char *valueString) {
+
+}
+
+uint8_t CommandMenuItem::getStringLength() {
+    return 0;
+}
+
+CommandMenuItem::CommandMenuItem(uint8_t *value, const char *label) : ValueMenuItemTemplate(value, label) {
+
+}
+
 #endif //EASYLCDMENU_COMMANDMENUITEM_HPP
