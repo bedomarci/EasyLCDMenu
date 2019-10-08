@@ -50,6 +50,7 @@ MenuItemTemplate<T>::MenuItemTemplate() {
 
 template<typename T>
 void MenuItemTemplate<T>::setMenu(Menu *menu) {
+    Serial.println("SET MENU");
     this->menu = menu;
 }
 

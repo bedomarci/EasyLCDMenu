@@ -26,14 +26,14 @@ void setup() {
     Serial.println("2");
     lcd.begin(16,2);
     Serial.println("3");
-
-    root->add(new NumberMenuItem(&var1, "VAR1"));
-    root->add(new NumberMenuItem(&var2, "VAR2"));
-    root->add(new NumberMenuItem(&var3, "VAR3"));
-    root->add(new NumberMenuItem(&var4, "VAR4"));
-    root->add(new NumberMenuItem(&var5, "VAR5"));
-    //menu.setRootMenuItem(root);
-    //menu.begin(&lcd);
+    root = new SubMenuItem(0,"SUBMENU");
+//    root->add(new NumberMenuItem(&var1, "VAR1"));
+//    root->add(new NumberMenuItem(&var2, "VAR2"));
+//    root->add(new NumberMenuItem(&var3, "VAR3"));
+//    root->add(new NumberMenuItem(&var4, "VAR4"));
+//    root->add(new NumberMenuItem(&var5, "VAR5"));
+//    menu.setRootMenuItem(root);
+    menu.begin(&lcd);
 //    lcd.print("HELLO");
     Serial.println("BEGIN");
     menu.enter();

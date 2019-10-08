@@ -59,6 +59,7 @@ void Menu::onHome(EasyLCDMenuFunction cb) {
 }
 
 void Menu::begin(LCD *lcd) {
+    Serial.println("MENU BEGIN");
     _lcd = lcd;
     this->_renderer->begin(lcd);
 }

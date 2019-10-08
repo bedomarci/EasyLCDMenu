@@ -25,6 +25,7 @@ size_t MenuRenderer::write(uint8_t value) {
 }
 
 void MenuRenderer::begin(LCD *lcd) {
+    Serial.println("RENDERER BEGIN");
     _lcd = lcd;
 }
 

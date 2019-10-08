@@ -25,11 +25,13 @@ protected:
 
 SubMenuItem::SubMenuItem() : MenuItemTemplate<uint8_t>() {
     this->container = new LinkedList<MenuItem *>();
-    cursorPositionMax = this->menu->getRenderer()->getRows();
+    cursorPositionMax = this->menu->getRows();
 }
 
 SubMenuItem::SubMenuItem(uint8_t *value, const char *label) : MenuItemTemplate<uint8_t>(value, label) {
     SubMenuItem();
+    Serial.println("SUBMENU CONSTRUCTOR");
+
 }
 
 void SubMenuItem::add(MenuItem *menuItem) {
@@ -39,14 +41,15 @@ void SubMenuItem::add(MenuItem *menuItem) {
 }
 
 void SubMenuItem::navigate(EasyLCDMenuControl control) {
+    selectedMenuItemIndex = container->size() - 1;
     switch (control) {
         case NEXT:
-            selectedMenuItemIndex = constrain(++selectedMenuItemIndex, 0, container->size() - 1);
-            cursorPosition        = constrain(++cursorPosition, 0, cursorPositionMax);
+            selectedMenuItemIndex = constrain((selectedMenuItemIndex + 1), 0, selectedMenuItemIndex);
+            cursorPosition        = constrain((cursorPosition + 1), 0, cursorPositionMax);
             break;
         case PREVIOUS:
-            selectedMenuItemIndex = constrain(--selectedMenuItemIndex, 0, container->size() - 1);
-            cursorPosition        = constrain(--cursorPosition, 0, cursorPositionMax);
+            selectedMenuItemIndex = constrain((selectedMenuItemIndex + 1), 0, selectedMenuItemIndex);
+            cursorPosition        = constrain((cursorPosition + 1), 0, cursorPositionMax);
             break;
         case GO:
             container->get(selectedMenuItemIndex)->enter();
