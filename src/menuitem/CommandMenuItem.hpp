@@ -39,10 +39,6 @@ void CommandMenuItem::toString(char *valueString) {
 
 }
 
-uint8_t CommandMenuItem::getStringLength() {
-    return 0;
-}
-
 CommandMenuItem::CommandMenuItem(uint8_t *value, const char *label) : ValueMenuItemTemplate(value, label) {
 
 }

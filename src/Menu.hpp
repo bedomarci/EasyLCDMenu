@@ -37,6 +37,9 @@ protected:
     MenuItem            *rootMenuItem   = nullptr;
     MenuItem            *activeMenuItem = nullptr;
     uint8_t             _rows, _columns;
+    bool active = false;
+public:
+    bool isActive() const;
 };
 
 

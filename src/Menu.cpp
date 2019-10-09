@@ -12,7 +12,9 @@ void Menu::setActiveMenuItem(MenuItem *menuItem) {
 
 void Menu::enter() {
     if (!this->rootMenuItem) return;
+    active = true;
     this->rootMenuItem->enter();
+    render();
 }
 
 void Menu::setRootMenuItem(MenuItem *menuItem) {
@@ -45,8 +47,11 @@ void Menu::back() {
 
 void Menu::home() {
     this->activeMenuItem = nullptr;
-    if (homeCallback) homeCallback();
-    Serial.println("GO HOME");
+    if (homeCallback) {
+        homeCallback();
+    }
+    active = false;
+    Serial.println("HOME");
 }
 
 void Menu::onHome(EasyLCDMenuFunction cb) {
@@ -67,8 +72,7 @@ MenuRenderer *Menu::getRenderer() {
 }
 
 void Menu::render() {
-    if (this->_renderer) {
-        Serial.println(31);
+    if (isActive()) {
         this->_renderer->render(this->activeMenuItem);
     }
 }
@@ -87,6 +91,10 @@ void Menu::setColumns(uint8_t columns) {
 
 void Menu::setRows(uint8_t rows) {
     _rows = rows;
+}
+
+bool Menu::isActive() const {
+    return active;
 }
 
 

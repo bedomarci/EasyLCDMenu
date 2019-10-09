@@ -7,24 +7,42 @@
 
 #include "ValueMenuItemTemplate.hpp"
 
-class NumberMenuItem : public ValueMenuItemTemplate<double> {
+class NumberMenuItem : public ValueMenuItemTemplate<int> {
 public:
-    NumberMenuItem(double *value, const char *label);
+    NumberMenuItem(int *value, const char *label, int minVal, int maxVal);
+
     void navigate(EasyLCDMenuControl control) override;
+
 protected:
     void toString(char *valueString) override;
-    uint8_t getStringLength() override;
-    double  step;
-    uint8_t stringLength = 0;
+
+    int _step = 1;
+    int _minVal, _maxVal;
+public:
+    int getStep() const;
+
+    int getMinVal() const;
+
+    void setMinVal(int minVal);
+
+    int getMaxVal() const;
+
+    void setMaxVal(int maxVal);
+
+public:
+    void setStep(int step);
 };
 
 void NumberMenuItem::navigate(EasyLCDMenuControl control) {
+    int newValue;
     switch (control) {
         case NEXT:
-            *this->_value += this->step;
+            newValue = *this->_value + this->_step;
+            *this->_value = constrain(newValue, _minVal, _maxVal);
             break;
         case PREVIOUS:
-            *this->_value -= this->step;
+            newValue = *this->_value - this->_step;
+            *this->_value = constrain(newValue, _minVal, _maxVal);
             break;
         case GO:
         case BACK:
@@ -34,15 +52,38 @@ void NumberMenuItem::navigate(EasyLCDMenuControl control) {
 }
 
 void NumberMenuItem::toString(char *valueString) {
-    stringLength = sprintf(valueString, "%.2f", this->getValue());
+    sprintf(valueString, "%d", this->getValue());
 }
 
-uint8_t NumberMenuItem::getStringLength() {
-    return this->stringLength;
+NumberMenuItem::NumberMenuItem(int *value, const char *label, int minVal = INT16_MIN, int maxVal = INT16_MAX)
+        : ValueMenuItemTemplate(value, label) {
+    this->setMinVal(minVal);
+    this->setMaxVal(maxVal);
+
 }
 
-NumberMenuItem::NumberMenuItem(double *value, const char *label) : ValueMenuItemTemplate(value, label) {
+void NumberMenuItem::setStep(int step) {
+    NumberMenuItem::_step = step;
+}
 
+int NumberMenuItem::getStep() const {
+    return _step;
+}
+
+int NumberMenuItem::getMinVal() const {
+    return _minVal;
+}
+
+void NumberMenuItem::setMinVal(int minVal) {
+    NumberMenuItem::_minVal = minVal;
+}
+
+int NumberMenuItem::getMaxVal() const {
+    return _maxVal;
+}
+
+void NumberMenuItem::setMaxVal(int maxVal) {
+    NumberMenuItem::_maxVal = maxVal;
 }
 
 #endif //EASYLCDMENU_NUMBERMENUITEM_HPP

@@ -15,20 +15,21 @@ public:
     virtual void navigate(EasyLCDMenuControl control) = 0;
 protected:
     virtual void toString(char *valueString) = 0;
-    virtual uint8_t getStringLength() = 0;
 };
 
 template<typename T>
 void ValueMenuItemTemplate<T>::render(uint8_t **display, uint8_t rows, uint8_t columns) {
     this->setCursor(0, 0);
     this->print(display, this->_label);
-    uint8_t strLen = this->getStringLength();
-    if (strLen) {
-        this->setCursor(this->getRows() - 1, this->getColumns() - strLen);
-        char *valueString = new char[this->getColumns() + 1];
-        this->toString(valueString);
-        this->print(display, valueString);
-    }
+
+    char *valueString = new char[this->getColumns() + 1];
+    this->toString(valueString);
+
+    uint8_t strLen = strlen(valueString);
+    Serial.println(valueString);
+    this->setCursor(this->getRows() - 1, this->getColumns() - strLen);
+    this->print(display, valueString);
+
 }
 
 template<typename T>

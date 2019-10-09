@@ -24,51 +24,66 @@ const int pin_BL = 10;
 LiquidCrystal lcd( pin_RS,  pin_EN,  pin_d4,  pin_d5,  pin_d6,  pin_d7);
 
 Menu menu(2,16);
+
+void home();
 SubMenuItem *root;
 
 int read_LCD_buttons();
 
 int thisBtn = btnNONE, lastBtn = btnNONE;
-double var1, var2, var3, var4, var5;
+int var1, var2, var3, var4, var5;
 
 void setup() {
     Serial.begin(115200);
     root = new SubMenuItem(0,"SUBMENU");
     lcd.begin(16, 2);
     menu.setRootMenuItem(root);
-    root->add(new NumberMenuItem(&var1, "VAR1"));
+    root->add(new NumberMenuItem(&var1, "VAR1", -2, 5));
     root->add(new NumberMenuItem(&var2, "VAR2"));
     root->add(new NumberMenuItem(&var3, "VAR3"));
     root->add(new NumberMenuItem(&var4, "VAR4"));
     root->add(new NumberMenuItem(&var5, "VAR5"));
 
     menu.begin(&lcd);
-//    lcd.print("HELLO");
     Serial.println("BEGIN");
+    menu.onHome(home);
     menu.enter();
 }
 void loop() {
     thisBtn = read_LCD_buttons();
     if (thisBtn!=lastBtn) {
-        switch (thisBtn) {
-            case btnDOWN:
-                menu.previous();
-                break;
-            case btnUP:
-                menu.next();
-                break;
-            case btnLEFT:
-                menu.back();
-                break;
-            case btnRIGHT:
-            case btnSELECT:
-                menu.go();
-                break;
+        if (!menu.isActive()) {
+            if (thisBtn == btnSELECT) {
+                menu.enter();
+                Serial.println("entering menu.");
+            }
+        } else {
+            switch (thisBtn) {
+                case btnDOWN:
+                    menu.previous();
+                    break;
+                case btnUP:
+                    menu.next();
+                    break;
+                case btnLEFT:
+                    menu.back();
+                    break;
+                case btnRIGHT:
+                case btnSELECT:
+                    menu.go();
+                    break;
+            }
         }
     }
-
     lastBtn = thisBtn;
     delay(50);
+}
+
+void home() {
+    lcd.clear();
+    lcd.home();
+    lcd.print("HOME");
+    Serial.println("arriving home");
 }
 
 
