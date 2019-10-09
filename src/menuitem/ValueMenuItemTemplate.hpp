@@ -20,12 +20,12 @@ protected:
 
 template<typename T>
 void ValueMenuItemTemplate<T>::render(uint8_t **display, uint8_t rows, uint8_t columns) {
-    setCursor(0, 0);
+    this->setCursor(0, 0);
     this->print(display, this->_label);
-    uint8_t strLen = getStringLength();
+    uint8_t strLen = this->getStringLength();
     if (strLen) {
-        setCursor(getRows() - 1, getColumns() - strLen);
-        char *valueString = new char[getColumns() + 1];
+        this->setCursor(this->getRows() - 1, this->getColumns() - strLen);
+        char *valueString = new char[this->getColumns() + 1];
         this->toString(valueString);
         this->print(display, valueString);
     }

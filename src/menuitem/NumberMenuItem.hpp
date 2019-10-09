@@ -34,7 +34,7 @@ void NumberMenuItem::navigate(EasyLCDMenuControl control) {
 }
 
 void NumberMenuItem::toString(char *valueString) {
-    stringLength = sprintf(valueString, "%.2f");
+    stringLength = sprintf(valueString, "%.2f", this->getValue());
 }
 
 uint8_t NumberMenuItem::getStringLength() {

@@ -10,10 +10,9 @@
 
 class MenuRenderer {
 public:
+    MenuRenderer(uint8_t rows, uint8_t columns);
     virtual void begin(LCD *lcd);
-    void setRows(uint8_t rows);
     uint8_t getRows();
-    void setColumns(uint8_t columns);
     uint8_t getColumns();
     size_t write(uint8_t value);
     void render(MenuItem * menuItem);

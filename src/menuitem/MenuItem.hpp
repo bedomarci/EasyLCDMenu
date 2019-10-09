@@ -20,7 +20,7 @@ public:
     void setValue(T value);
     T getValue();
     const char *getLabel();
-    void setMenu(Menu *menu);
+    virtual void setMenu(Menu *menu);
     void setParent(MenuItem *parent);
 protected:
     MenuItem   *parent;
@@ -41,7 +41,7 @@ protected:
 template<typename T>
 MenuItemTemplate<T>::MenuItemTemplate(T *value, const char *label) :MenuItemTemplate<T>() {
     this->_label = label;
-    this->_value = value;;
+    this->_value = value;
 }
 
 template<typename T>
@@ -50,13 +50,17 @@ MenuItemTemplate<T>::MenuItemTemplate() {
 
 template<typename T>
 void MenuItemTemplate<T>::setMenu(Menu *menu) {
-    Serial.println("SET MENU");
+    if (menu) {
+        Serial.print("[1NN-");
+    } else {
+        Serial.print("[2NULL-");
+    }
     this->menu = menu;
 }
 
 template<typename T>
 T MenuItemTemplate<T>::getValue() {
-    return _value;
+    return *_value;
 }
 
 template<typename T>
@@ -79,7 +83,6 @@ void MenuItemTemplate<T>::enter() {
     if (!this->menu) return;
     menu->setActiveMenuItem(this);
     this->menu->render();
-    Serial.println("ENTER");
 }
 
 template<typename T>
@@ -100,14 +103,16 @@ void MenuItemTemplate<T>::setCursor(uint8_t row, uint8_t column) {
 
 template<typename T>
 void MenuItemTemplate<T>::print(uint8_t **display, const char *txt) {
+    Serial.println(61);
     uint8_t length = strlen(txt);
-    memcpy(display[cursorRow][cursorColumn], txt, length);
+    memcpy(&display[cursorRow][cursorColumn], txt, length);
     cursorRow += length;
+    Serial.println(62);
 }
 
 template<typename T>
 void MenuItemTemplate<T>::print(uint8_t **display, char c) {
-    display[cursorRow, cursorColumn] = c;
+    display[cursorRow][cursorColumn] = c;
     cursorRow++;
 }
 

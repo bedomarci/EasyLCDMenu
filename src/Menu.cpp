@@ -1,12 +1,9 @@
 #include "Menu.hpp"
 
-Menu::Menu() {
-    _renderer = new MenuRenderer();
-}
-
-Menu::Menu(uint8_t rows, uint8_t columns) : Menu() {
+Menu::Menu(uint8_t rows, uint8_t columns) {
     _rows = rows;
     _columns = columns;
+    _renderer = new MenuRenderer(rows, columns);
 }
 
 void Menu::setActiveMenuItem(MenuItem *menuItem) {
@@ -14,9 +11,7 @@ void Menu::setActiveMenuItem(MenuItem *menuItem) {
 }
 
 void Menu::enter() {
-    Serial.println("ENTER MENU");
     if (!this->rootMenuItem) return;
-    Serial.println("ENTER MENU2");
     this->rootMenuItem->enter();
 }
 
@@ -59,7 +54,6 @@ void Menu::onHome(EasyLCDMenuFunction cb) {
 }
 
 void Menu::begin(LCD *lcd) {
-    Serial.println("MENU BEGIN");
     _lcd = lcd;
     this->_renderer->begin(lcd);
 }
@@ -73,7 +67,10 @@ MenuRenderer *Menu::getRenderer() {
 }
 
 void Menu::render() {
-    this->_renderer->render(this->activeMenuItem);
+    if (this->_renderer) {
+        Serial.println(31);
+        this->_renderer->render(this->activeMenuItem);
+    }
 }
 
 uint8_t Menu::getRows() {

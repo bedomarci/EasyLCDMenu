@@ -4,16 +4,13 @@
 
 #include "MenuRenderer.h"
 
-void MenuRenderer::setRows(uint8_t rows) {
-    this->_rows = rows;
+MenuRenderer::MenuRenderer(uint8_t rows, uint8_t columns) {
+    _rows = rows;
+    _columns = columns;
 }
 
 uint8_t MenuRenderer::getRows() {
     return _rows;
-}
-
-void MenuRenderer::setColumns(uint8_t columns) {
-    this->_columns = columns;
 }
 
 uint8_t MenuRenderer::getColumns() {
@@ -35,9 +32,11 @@ void MenuRenderer::render(MenuItem *menuItem) {
     newDisplay = new uint8_t *[getColumns()];
     for (int i = 0; i < getRows(); i++) {
         newDisplay[i] = new uint8_t[getColumns()];
+        for (int j = 0; j < getColumns(); j++) newDisplay[i][j] = ' ';
     }
     //Get screen data from menuitem
     menuItem->render(newDisplay, getRows(), getColumns());
+
 
     //Print it out
     this->_lcd->clear();
@@ -45,7 +44,11 @@ void MenuRenderer::render(MenuItem *menuItem) {
     for (int i = 0; i < getRows(); i++) {
         this->_lcd->setCursor(0, i);
         for (int j = 0; j < getColumns(); j++) {
-            this->_lcd->print(newDisplay[i][j]);
+            this->_lcd->print((char)newDisplay[i][j]);
+            Serial.print((char)newDisplay[i][j]);
+            Serial.print(' ');
+
         }
     }
 }
+

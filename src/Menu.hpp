@@ -10,7 +10,6 @@
 
 class Menu {
 public:
-    Menu();
     Menu(uint8_t rows, uint8_t columns);
     void begin(LCD *lcd);
     void onHome(EasyLCDMenuFunction cb);
