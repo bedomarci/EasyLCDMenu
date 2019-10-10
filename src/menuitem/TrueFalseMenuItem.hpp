@@ -15,8 +15,12 @@ public:
 protected:
     char *trueLabel  = const_cast<char *>(EasyLCDMenuTrue);
     char *falseLabel = const_cast<char *>(EasyLCDMenuFalse);
-    void toString(char *valueString);
-    uint8_t getStringLength();
+
+    void toString(char *valueString) override;
+
+    void increase() override;
+
+    void decrease() override;
 };
 
 void TrueFalseMenuItem::setTrueLabel(char *txt) {
@@ -28,19 +32,19 @@ void TrueFalseMenuItem::setFalseLabel(char *txt) {
 }
 
 void TrueFalseMenuItem::toString(char *valueString) {
-    memcpy(
-            valueString,
-            (_value) ? trueLabel : falseLabel,
-            (_value) ? strlen(trueLabel) : strlen(falseLabel)
-    );
-}
-
-uint8_t TrueFalseMenuItem::getStringLength() {
-    return (_value) ? strlen(trueLabel) : strlen(falseLabel);
+    strcpy(valueString, (getValue()) ? trueLabel : falseLabel);
 }
 
 TrueFalseMenuItem::TrueFalseMenuItem(bool *value, const char *label) : ValueMenuItemTemplate<bool>(value, label) {
 
+}
+
+void TrueFalseMenuItem::increase() {
+    setValue(!getValue());
+}
+
+void TrueFalseMenuItem::decrease() {
+    setValue(!getValue());
 }
 
 #endif //EASYLCDMENU_TRUEFALSEMENUITEM_HPP

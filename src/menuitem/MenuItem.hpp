@@ -23,18 +23,28 @@ public:
     virtual void setMenu(Menu *menu);
     void setParent(MenuItem *parent);
 protected:
+    uint8_t icon;
+    uint8_t cursorRow = 0, cursorColumn = 0;
+
+    uint8_t getRows();
+
+    uint8_t getColumns();
+
+    MenuItem *getParent();
+
+    Menu *getMenu();
+
+    void setCursor(uint8_t row, uint8_t column);
+
+    void print(uint8_t **display, const char *txt);
+
+    void print(uint8_t **display, char c);
+
+private:
     MenuItem   *parent = nullptr;
     Menu       *menu = nullptr;
     T          *_value = nullptr;
     const char *_label = nullptr;
-    uint8_t    icon;
-    uint8_t    cursorRow = 0, cursorColumn = 0;
-    uint8_t getRows();
-    uint8_t getColumns();
-    MenuItem *getParent();
-    void setCursor(uint8_t row, uint8_t column);
-    void print(uint8_t **display, const char *txt);
-    void print(uint8_t **display, char c);
 
 };
 
@@ -65,7 +75,7 @@ T MenuItemTemplate<T>::getValue() {
 
 template<typename T>
 void MenuItemTemplate<T>::setValue(T value) {
-    this->_value = value;
+    *this->_value = value;
 }
 
 template<typename T>
@@ -127,6 +137,11 @@ uint8_t MenuItemTemplate<T>::getColumns() {
 template<typename T>
 const char *MenuItemTemplate<T>::getLabel() {
     return this->_label;
+}
+
+template<typename T>
+Menu *MenuItemTemplate<T>::getMenu() {
+    return menu;
 }
 
 

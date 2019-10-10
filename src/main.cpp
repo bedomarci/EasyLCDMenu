@@ -3,6 +3,8 @@
 #include "Menu.hpp"
 #include "menuitem/SubMenuItem.hpp"
 #include "menuitem/NumberMenuItem.hpp"
+#include "menuitem/TrueFalseMenuItem.hpp"
+#include "menuitem/OptionMenuItem.hpp"
 
 const int pin_RS = 8;
 const int pin_EN = 9;
@@ -27,11 +29,15 @@ Menu menu(2,16);
 
 void home();
 SubMenuItem *root;
+OptionMenuItem<3> *option1;
 
 int read_LCD_buttons();
 
 int thisBtn = btnNONE, lastBtn = btnNONE;
 int var1, var2, var3, var4, var5;
+bool bool1;
+uint8_t opt1;
+const char *optionLabels[] = {"AAA", "BBB", "CCC"};
 
 void setup() {
     Serial.begin(115200);
@@ -39,8 +45,11 @@ void setup() {
     lcd.begin(16, 2);
     menu.setRootMenuItem(root);
     root->add(new NumberMenuItem(&var1, "VAR1", -2, 5));
-    root->add(new NumberMenuItem(&var2, "VAR2"));
-    root->add(new NumberMenuItem(&var3, "VAR3"));
+    root->add(new TrueFalseMenuItem(&bool1, "BOOL2"));
+
+    option1 = new OptionMenuItem<3>(&opt1, "OPT3");
+    option1->setOptions(optionLabels);
+    root->add(option1);
     root->add(new NumberMenuItem(&var4, "VAR4"));
     root->add(new NumberMenuItem(&var5, "VAR5"));
 

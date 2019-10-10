@@ -37,14 +37,14 @@ SubMenuItem::SubMenuItem(uint8_t *value, const char *label) : MenuItemTemplate<u
 void SubMenuItem::add(MenuItem *menuItem) {
     container.add(menuItem);
     menuItem->setParent(this);
-    if (this->menu) {
-        menuItem->setMenu(this->menu);
+    if (this->getMenu()) {
+        menuItem->setMenu(this->getMenu());
     }
 }
 
 void SubMenuItem::navigate(EasyLCDMenuControl control) {
     selectedMenuItemIndexMax = container.size() - 1;
-    cursorPositionMax = this->menu->getRows()-1;
+    cursorPositionMax = this->getMenu()->getRows()-1;
 
     switch (control) {
         case NEXT:

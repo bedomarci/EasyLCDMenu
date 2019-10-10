@@ -12,15 +12,33 @@ class ValueMenuItemTemplate : public MenuItemTemplate<T> {
 public:
     ValueMenuItemTemplate(T *value, const char *label);
     void render(uint8_t **display, uint8_t rows, uint8_t columns) override;
-    virtual void navigate(EasyLCDMenuControl control) = 0;
+    void navigate(EasyLCDMenuControl control);
 protected:
     virtual void toString(char *valueString) = 0;
+    virtual void increase() = 0;
+    virtual void decrease() = 0;
 };
+template<typename T>
+void ValueMenuItemTemplate<T>::navigate(EasyLCDMenuControl control) {
+    switch (control) {
+        case NEXT:
+            increase();
+            break;
+        case PREVIOUS:
+            decrease();
+            break;
+        case GO:
+            break;
+        case BACK:
+            this->leave();
+            break;
+    }
+}
 
 template<typename T>
 void ValueMenuItemTemplate<T>::render(uint8_t **display, uint8_t rows, uint8_t columns) {
     this->setCursor(0, 0);
-    this->print(display, this->_label);
+    this->print(display, this->getLabel());
 
     char *valueString = new char[this->getColumns() + 1];
     this->toString(valueString);

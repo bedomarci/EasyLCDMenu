@@ -10,15 +10,6 @@
 class NumberMenuItem : public ValueMenuItemTemplate<int> {
 public:
     NumberMenuItem(int *value, const char *label, int minVal, int maxVal);
-
-    void navigate(EasyLCDMenuControl control) override;
-
-protected:
-    void toString(char *valueString) override;
-
-    int _step = 1;
-    int _minVal, _maxVal;
-public:
     int getStep() const;
 
     int getMinVal() const;
@@ -29,27 +20,18 @@ public:
 
     void setMaxVal(int maxVal);
 
-public:
     void setStep(int step);
-};
 
-void NumberMenuItem::navigate(EasyLCDMenuControl control) {
-    int newValue;
-    switch (control) {
-        case NEXT:
-            newValue = *this->_value + this->_step;
-            *this->_value = constrain(newValue, _minVal, _maxVal);
-            break;
-        case PREVIOUS:
-            newValue = *this->_value - this->_step;
-            *this->_value = constrain(newValue, _minVal, _maxVal);
-            break;
-        case GO:
-        case BACK:
-            leave();
-            break;
-    }
-}
+protected:
+    void toString(char *valueString) override;
+
+    void increase() override;
+
+    void decrease() override;
+
+    int _step = 1;
+    int _minVal, _maxVal;
+};
 
 void NumberMenuItem::toString(char *valueString) {
     sprintf(valueString, "%d", this->getValue());
@@ -84,6 +66,16 @@ int NumberMenuItem::getMaxVal() const {
 
 void NumberMenuItem::setMaxVal(int maxVal) {
     NumberMenuItem::_maxVal = maxVal;
+}
+
+void NumberMenuItem::increase() {
+    int newValue = this->getValue() + this->_step;
+    this->setValue(constrain(newValue, _minVal, _maxVal));
+}
+
+void NumberMenuItem::decrease() {
+    int newValue = this->getValue() - this->_step;
+    this->setValue(constrain(newValue, _minVal, _maxVal));
 }
 
 #endif //EASYLCDMENU_NUMBERMENUITEM_HPP
