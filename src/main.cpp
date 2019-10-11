@@ -37,7 +37,7 @@ int thisBtn = btnNONE, lastBtn = btnNONE;
 int var1, var2, var3, var4, var5;
 bool bool1;
 uint8_t opt1;
-const char *optionLabels[] = {"AAA", "BBB", "CCC"};
+const char *optionLabels[] = {"Elso", "Második", "óüöúőűáéí"};
 
 void setup() {
     Serial.begin(115200);

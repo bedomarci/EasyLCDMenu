@@ -39,14 +39,14 @@ void OptionMenuItem<LENGTH>::toString(char *valueString) {
 
 template<uint8_t LENGTH>
 void OptionMenuItem<LENGTH>::increase() {
-    uint8_t newIndex = getValue() + 1;
-    setValue(constrain(newIndex, 0, LENGTH));
+    int16_t newIndex = getValue() - 1;
+    setValue(constrain(newIndex, 0, LENGTH-1));
 }
 
 template<uint8_t LENGTH>
 void OptionMenuItem<LENGTH>::decrease() {
-    uint8_t newIndex = getValue() - 1;
-    setValue(constrain(newIndex, 0, LENGTH));
+    int16_t newIndex = getValue() + 1;
+    setValue(constrain(newIndex, 0, LENGTH-1));
 }
 
 template<uint8_t LENGTH>

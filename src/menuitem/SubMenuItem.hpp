@@ -72,7 +72,7 @@ void SubMenuItem::render(uint8_t **display, uint8_t rows, uint8_t columns) {
         this->print(display, currentSubmenuItem->getLabel());
     }
     this->setCursor(cursorPosition, 0);
-    this->print(display, '>');
+    this->print(display, EasyLCDMenuRight);
 }
 
 void SubMenuItem::setMenu(Menu *menu) {

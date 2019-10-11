@@ -9,6 +9,10 @@
 
 const char *const EasyLCDMenuTrue  = "On";
 const char *const EasyLCDMenuFalse = "Off";
+const char EasyLCDMenuGo = '>';
+const char EasyLCDMenuRight = B01111110;
+const char EasyLCDMenuLeft = B01111111;
+const char EasyLCDMenuBack = '<';
 
 typedef void (*EasyLCDMenuFunction)();
 

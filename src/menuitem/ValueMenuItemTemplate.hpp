@@ -42,6 +42,8 @@ void ValueMenuItemTemplate<T>::render(uint8_t **display, uint8_t rows, uint8_t c
 
     char *valueString = new char[this->getColumns() + 1];
     this->toString(valueString);
+    this->setCursor(this->getRows() - 1, 0);
+    this->print(display, EasyLCDMenuLeft);
 
     uint8_t strLen = strlen(valueString);
     Serial.println(valueString);
