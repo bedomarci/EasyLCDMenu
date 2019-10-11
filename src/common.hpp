@@ -7,12 +7,12 @@
 
 #include "Arduino.h"
 
+#define EASYLCDMENU_DEFAULT_ANIM_INTERVAL 100
+
 const char *const EasyLCDMenuTrue  = "On";
 const char *const EasyLCDMenuFalse = "Off";
-const char EasyLCDMenuGo = '>';
 const char EasyLCDMenuRight = B01111110;
-const char EasyLCDMenuLeft = B01111111;
-const char EasyLCDMenuBack = '<';
+const char EasyLCDMenuLeft  = B01111111;
 
 typedef void (*EasyLCDMenuFunction)();
 

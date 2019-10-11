@@ -20,6 +20,8 @@ private:
     uint8_t _rows    = 0;
     uint8_t _columns = 0;
     LCD *_lcd = nullptr;
+//    Task tTransition();
+//    void makeTransition (uint8_t **from, uint8_t **to);
 };
 
 
