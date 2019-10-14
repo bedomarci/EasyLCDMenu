@@ -1,22 +1,16 @@
-#include "Menu.hpp"
 
+#include "Menu.hpp"
 #include "TaskScheduler.h"
 
+
 Menu::Menu(uint8_t rows, uint8_t columns) {
-    _rows       = rows;
-    _columns    = columns;
-//    _renderer   = new MenuRenderer(rows, columns);
-//    tTransition = new Task(EASYLCDMENU_DEFAULT_ANIM_INTERVAL, columns, [this]() { this->makeStep(); });
-//    tTransition = new Task(EASYLCDMENU_DEFAULT_ANIM_INTERVAL, columns, []() {  });
-//    tTransition = new Task(EASYLCDMENU_DEFAULT_ANIM_INTERVAL, columns, (etl::ifunction<void>*)etl::function_imv<&Menu, this, &Menu::makeStep>);
-
-//    tTransition = new Task(EASYLCDMENU_DEFAULT_ANIM_INTERVAL, columns, etl::delegate<int(int)>::create([this]() { this->makeStep(); }));
-
-    newDisplay     = new uint8_t *[getColumns()];
-    currentDisplay = new uint8_t *[getColumns()];
+    _rows     = rows;
+    _columns  = columns;
+    newScreen = new uint8_t *[getColumns()];
+    oldScreen = new uint8_t *[getColumns()];
     for (int i = 0; i < getRows(); i++) {
-        newDisplay[i]     = new uint8_t[getColumns()];
-        currentDisplay[i] = new uint8_t[getColumns()];
+        newScreen[i] = new uint8_t[getColumns()];
+        oldScreen[i] = new uint8_t[getColumns()];
     }
 }
 
@@ -113,17 +107,22 @@ bool Menu::isActive() const {
 
 void Menu::render() {
     if (!isActive()) return;
-        //Initialize screen matrix.
-//    uint8_t **newDisplay;
-//    newDisplay = new uint8_t *[getColumns()];
+    //Initialize screen matrix.
+//    uint8_t **newScreen;
+//    newScreen = new uint8_t *[getColumns()];
 //    for (int i = 0; i < getRows(); i++) {
-//        newDisplay[i] = new uint8_t[getColumns()];
-//        for (int j = 0; j < getColumns(); j++) newDisplay[i][j] = ' ';
+//        newScreen[i] = new uint8_t[getColumns()];
+//        for (int j = 0; j < getColumns(); j++) newScreen[i][j] = ' ';
 //    }
-    this->fill(newDisplay);
+    this->fill(newScreen);
     //Get screen data from menuitem
-    this->activeMenuItem->render(newDisplay, getRows(), getColumns());
-    this->print(newDisplay);
+    this->activeMenuItem->render(newScreen, getRows(), getColumns());
+    if (transitionCallback) {
+        this->transitionCallback(oldScreen, newScreen);
+    } else {
+        this->print(newScreen);
+    }
+    this->copy(oldScreen, newScreen);
 
     //Print it out
 //    this->_lcd->clear();
@@ -131,41 +130,44 @@ void Menu::render() {
 //    for (int i = 0; i < getRows(); i++) {
 //        this->_lcd->setCursor(0, i);
 //        for (int j = 0; j < getColumns(); j++) {
-//            this->_lcd->print((char) newDisplay[i][j]);
+//            this->_lcd->print((char) newScreen[i][j]);
 //        }
-//        delete (newDisplay[i]);
+//        delete (newScreen[i]);
 //    }
-//    delete (newDisplay);
+//    delete (newScreen);
 }
 
-void Menu::makeStep() {
-
-}
-
-void Menu::makeTransition(uint8_t **from, uint8_t **to) {
-
-    tTransition->restart();
-}
-
-void Menu::fill(uint8_t **display) {
+void Menu::fill(uint8_t **screen) {
     for (int i = 0; i < getRows(); i++) {
         for (int j = 0; j < getColumns(); j++) {
-            display[i][j] = ' ';
+            screen[i][j] = ' ';
         }
     }
 }
 
-void Menu::print(uint8_t **display) {
+void Menu::print(uint8_t **screen) {
     this->_lcd->clear();
     this->_lcd->home();
     for (int i = 0; i < getRows(); i++) {
         this->_lcd->setCursor(0, i);
         for (int j = 0; j < getColumns(); j++) {
-            this->_lcd->print((char) display[i][j]);
+            this->_lcd->print((char) screen[i][j]);
         }
-//        delete (display[i]);
+//        delete (screen[i]);
     }
-//    delete (display);
+//    delete (screen);
+}
+
+void Menu::setTransition(EasyLCDMenuTransition cb) {
+    transitionCallback = cb;
+}
+
+void Menu::copy(uint8_t **oldScreen, uint8_t **newScreen) {
+    for (int i = 0; i < getRows(); i++) {
+        for (int j = 0; j < getColumns(); j++) {
+            oldScreen[i][j] = newScreen[i][j];
+        }
+    }
 }
 
 

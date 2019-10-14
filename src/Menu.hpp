@@ -6,10 +6,9 @@
 #define EASYLCDMENU_MENU_HPP
 
 #include "common.hpp"
-//#include "MenuRenderer.h"
-#include "etl/function.h"
 #include "TaskSchedulerDeclarations.h"
 #include <LCD.h>
+
 
 class Menu {
 public:
@@ -25,30 +24,28 @@ public:
     void go();
     void back();
     void navigate(EasyLCDMenuControl control);
-    LCD* getLcd();
+    LCD *getLcd();
     void render();
     void setRows(uint8_t rows);
     uint8_t getRows();
     void setColumns(uint8_t _columns);
     uint8_t getColumns();
+    void setTransition(EasyLCDMenuTransition cb);
 
 //    MenuRenderer* getRenderer();
 protected:
-    LCD* _lcd;
-    Task *tTransition;
-//    MenuRenderer        *_renderer;
-    EasyLCDMenuFunction homeCallback = nullptr;
-    MenuItem            *rootMenuItem   = nullptr;
-    MenuItem            *activeMenuItem = nullptr;
-    uint8_t             _rows, _columns;
-    uint8_t **newDisplay;
-    uint8_t **currentDisplay;
-    bool active = false;
-//    void render(MenuItem * menuItem);
-    void makeStep();
-    void makeTransition (uint8_t **from, uint8_t **to);
-    void fill(uint8_t ** display);
-    void print(uint8_t ** display);
+    LCD                   *_lcd;
+    EasyLCDMenuTransition transitionCallback = nullptr;
+    EasyLCDMenuFunction   homeCallback       = nullptr;
+    MenuItem              *rootMenuItem      = nullptr;
+    MenuItem              *activeMenuItem    = nullptr;
+    uint8_t               _rows, _columns;
+    uint8_t               **newScreen;
+    uint8_t               **oldScreen;
+    bool                  active             = false;
+    void fill(uint8_t **screen);
+    void print(uint8_t **screen);
+    void copy(uint8_t **oldScreen, uint8_t **newScreen);
 public:
     bool isActive() const;
 };
