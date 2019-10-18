@@ -4,43 +4,62 @@
 
 #ifndef EASYLCDMENU_COMMANDMENUITEM_HPP
 #define EASYLCDMENU_COMMANDMENUITEM_HPP
+
 #include "ValueMenuItemTemplate.hpp"
 
-class CommandMenuItem : public ValueMenuItemTemplate<uint8_t> {
+class CommandMenuItem : public MenuItemTemplate<EasyLCDMenuFunction> {
 public:
-    CommandMenuItem(uint8_t *value, const char *label);
-    virtual void navigate(EasyLCDMenuControl control);
-    void setCallback(EasyLCDMenuFunction cb);
+    CommandMenuItem(EasyLCDMenuFunction value, const char *label, const char *description = nullptr);
+
+    void navigate(EasyLCDMenuControl control) override;
+
+    void render(uint8_t **display, uint8_t rows, uint8_t columns) override;
+
+    void setDescription(const char *description);
+
 protected:
     EasyLCDMenuFunction _callback = nullptr;
+
     void toString(char *valueString);
-    uint8_t getStringLength();
+
+    const char *_description;
 };
 
 void CommandMenuItem::navigate(EasyLCDMenuControl control) {
     switch (control) {
         case GO:
-            if (_callback) {
-                _callback();
-                this->menu->home();
+            if (getValue()){
+                getValue()();
+                this->getMenu()->home();
             }
-        break;
+            break;
         case BACK:
             this->leave();
-        break;
+            break;
+        case NEXT:
+        case PREVIOUS:
+            break;
     }
 }
 
-void CommandMenuItem::setCallback(EasyLCDMenuFunction cb) {
-    _callback = cb;
+CommandMenuItem::CommandMenuItem(EasyLCDMenuFunction value, const char *label, const char *description)
+        : MenuItemTemplate(&value, label) {
+    setDescription(description);
 }
 
-void CommandMenuItem::toString(char *valueString) {
+void CommandMenuItem::render(uint8_t **display, uint8_t rows, uint8_t columns) {
+    this->setCursor(0, 0);
+    this->print(display, this->getLabel());
 
+    this->setCursor(this->getRows() - 1, 0);
+    this->print(display, this->_description);
+
+    this->setCursor(this->getRows() - 1, this->getColumns() - 1);
+    this->print(display, EasyLCDMenuRight);
 }
 
-CommandMenuItem::CommandMenuItem(uint8_t *value, const char *label) : ValueMenuItemTemplate(value, label) {
-
+void CommandMenuItem::setDescription(const char *description) {
+    _description = description;
 }
 
 #endif //EASYLCDMENU_COMMANDMENUITEM_HPP

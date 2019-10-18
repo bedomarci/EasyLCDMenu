@@ -6,6 +6,7 @@
 #include "menuitem/NumberMenuItem.hpp"
 #include "menuitem/TrueFalseMenuItem.hpp"
 #include "menuitem/OptionMenuItem.hpp"
+#include "menuitem/CommandMenuItem.hpp"
 
 const int pin_RS = 8;
 const int pin_EN = 9;
@@ -29,6 +30,7 @@ LiquidCrystal lcd( pin_RS,  pin_EN,  pin_d4,  pin_d5,  pin_d6,  pin_d7);
 Menu menu(2,16);
 
 void home();
+void cb();
 SubMenuItem *root;
 OptionMenuItem<3> *option1;
 
@@ -48,6 +50,7 @@ void setup() {
     menu.setTransition(EasyLCDMenuPushTransition);
     root->add(new NumberMenuItem(&var1, "VAR1", -2, 5));
     root->add(new TrueFalseMenuItem(&bool1, "BOOL2"));
+    root->add(new CommandMenuItem(cb,"CALLBACK", "This is neat!"));
 
     option1 = new OptionMenuItem<3>(&opt1, "OPT3");
     option1->setOptions(optionLabels);
@@ -111,3 +114,6 @@ int read_LCD_buttons() {
     return btnNONE;  // when all others fail, return this...
 }
 
+void cb() {
+    Serial.println("METHOD HAS BEEN CALLED");
+}

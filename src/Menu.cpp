@@ -58,7 +58,6 @@ void Menu::home() {
     }
     active = false;
     fill(oldScreen);
-    Serial.println("HOME");
 }
 
 void Menu::onHome(EasyLCDMenuFunction cb) {
@@ -67,7 +66,6 @@ void Menu::onHome(EasyLCDMenuFunction cb) {
 
 void Menu::begin(LCD *lcd) {
     _lcd = lcd;
-//    this->_renderer->begin(lcd);
 }
 
 LCD *Menu::getLcd() {

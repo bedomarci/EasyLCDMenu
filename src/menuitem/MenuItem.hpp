@@ -88,7 +88,6 @@ void MenuItemTemplate<T>::enter(EasyLCDMenuTransition transition) {
     if (!this->menu) return;
     menu->setActiveMenuItem(this);
     menu->render(transition);
-    Serial.println(this->getLabel());
 }
 
 template<typename T>
