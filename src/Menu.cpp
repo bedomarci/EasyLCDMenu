@@ -21,8 +21,7 @@ void Menu::setActiveMenuItem(MenuItem *menuItem) {
 void Menu::enter() {
     if (!this->rootMenuItem) return;
     active = true;
-    this->rootMenuItem->enter();
-    render();
+    this->rootMenuItem->enter(NONE);
 }
 
 void Menu::setRootMenuItem(MenuItem *menuItem) {
@@ -33,7 +32,6 @@ void Menu::setRootMenuItem(MenuItem *menuItem) {
 void Menu::navigate(EasyLCDMenuControl control) {
     if (this->activeMenuItem) {
         this->activeMenuItem->navigate(control);
-        render();
     }
 }
 
@@ -59,6 +57,7 @@ void Menu::home() {
         homeCallback();
     }
     active = false;
+    fill(oldScreen);
     Serial.println("HOME");
 }
 
@@ -74,16 +73,6 @@ void Menu::begin(LCD *lcd) {
 LCD *Menu::getLcd() {
     return _lcd;
 }
-
-//MenuRenderer *Menu::getRenderer() {
-//    return _renderer;
-//}
-
-//void Menu::render() {
-//    if (isActive()) {
-////        this->_renderer->render(this->activeMenuItem);
-//    }
-//}
 
 uint8_t Menu::getRows() {
     return _rows;
@@ -105,36 +94,18 @@ bool Menu::isActive() const {
     return active;
 }
 
-void Menu::render() {
+void Menu::render(EasyLCDMenuTransition transition) {
     if (!isActive()) return;
     //Initialize screen matrix.
-//    uint8_t **newScreen;
-//    newScreen = new uint8_t *[getColumns()];
-//    for (int i = 0; i < getRows(); i++) {
-//        newScreen[i] = new uint8_t[getColumns()];
-//        for (int j = 0; j < getColumns(); j++) newScreen[i][j] = ' ';
-//    }
     this->fill(newScreen);
     //Get screen data from menuitem
     this->activeMenuItem->render(newScreen, getRows(), getColumns());
-    if (transitionCallback) {
-        this->transitionCallback(oldScreen, newScreen);
+    if (transitionCallback && transition != NONE) {
+        this->transitionCallback(oldScreen, newScreen,  _lcd, getRows(), getColumns(), transition) ;
     } else {
         this->print(newScreen);
     }
     this->copy(oldScreen, newScreen);
-
-    //Print it out
-//    this->_lcd->clear();
-//    this->_lcd->home();
-//    for (int i = 0; i < getRows(); i++) {
-//        this->_lcd->setCursor(0, i);
-//        for (int j = 0; j < getColumns(); j++) {
-//            this->_lcd->print((char) newScreen[i][j]);
-//        }
-//        delete (newScreen[i]);
-//    }
-//    delete (newScreen);
 }
 
 void Menu::fill(uint8_t **screen) {
@@ -153,12 +124,10 @@ void Menu::print(uint8_t **screen) {
         for (int j = 0; j < getColumns(); j++) {
             this->_lcd->print((char) screen[i][j]);
         }
-//        delete (screen[i]);
     }
-//    delete (screen);
 }
 
-void Menu::setTransition(EasyLCDMenuTransition cb) {
+void Menu::setTransition(EasyLCDMenuTransitionFunction cb) {
     transitionCallback = cb;
 }
 

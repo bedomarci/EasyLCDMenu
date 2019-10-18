@@ -15,7 +15,7 @@ public:
     MenuItemTemplate(T *value, const char *label);
     virtual void render(uint8_t **display, uint8_t rows, uint8_t columns) = 0;
     virtual void navigate(EasyLCDMenuControl control) = 0;
-    void enter();
+    void enter(EasyLCDMenuTransition transition = NONE);
     void leave();
     void setValue(T value);
     T getValue();
@@ -60,11 +60,6 @@ MenuItemTemplate<T>::MenuItemTemplate() {
 
 template<typename T>
 void MenuItemTemplate<T>::setMenu(Menu *menu) {
-//    if (menu) {
-//        Serial.print("[1NN-");
-//    } else {
-//        Serial.print("[2NULL-");
-//    }
     this->menu = menu;
 }
 
@@ -89,9 +84,10 @@ MenuItem *MenuItemTemplate<T>::getParent() {
 }
 
 template<typename T>
-void MenuItemTemplate<T>::enter() {
+void MenuItemTemplate<T>::enter(EasyLCDMenuTransition transition) {
     if (!this->menu) return;
     menu->setActiveMenuItem(this);
+    menu->render(transition);
     Serial.println(this->getLabel());
 }
 
@@ -99,7 +95,7 @@ template<typename T>
 void MenuItemTemplate<T>::leave() {
     MenuItem *parent = this->getParent();
     if (parent) {
-        parent->enter();
+        parent->enter(LEFT);
     } else {
         menu->home();
     }

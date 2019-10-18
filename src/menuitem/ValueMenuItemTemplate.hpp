@@ -11,21 +11,29 @@ template<typename T>
 class ValueMenuItemTemplate : public MenuItemTemplate<T> {
 public:
     ValueMenuItemTemplate(T *value, const char *label);
+
     void render(uint8_t **display, uint8_t rows, uint8_t columns) override;
+
     void navigate(EasyLCDMenuControl control);
+
 protected:
     virtual void toString(char *valueString) = 0;
+
     virtual void increase() = 0;
+
     virtual void decrease() = 0;
 };
+
 template<typename T>
 void ValueMenuItemTemplate<T>::navigate(EasyLCDMenuControl control) {
     switch (control) {
         case NEXT:
             increase();
+            this->getMenu()->render(NONE);
             break;
         case PREVIOUS:
             decrease();
+            this->getMenu()->render(NONE);
             break;
         case GO:
             break;

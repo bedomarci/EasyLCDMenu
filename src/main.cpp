@@ -1,6 +1,7 @@
 #include "Arduino.h"
 #include "LiquidCrystal.h"
 #include "Menu.hpp"
+#include "EasyLCDMenyTransitions.h"
 #include "menuitem/SubMenuItem.hpp"
 #include "menuitem/NumberMenuItem.hpp"
 #include "menuitem/TrueFalseMenuItem.hpp"
@@ -37,13 +38,14 @@ int thisBtn = btnNONE, lastBtn = btnNONE;
 int var1, var2, var3, var4, var5;
 bool bool1;
 uint8_t opt1;
-const char *optionLabels[] = {"Elso", "Második", "óüöúőűáéí"};
+const char *optionLabels[] = {"First", "Second", "Third"};
 
 void setup() {
     Serial.begin(115200);
     root = new SubMenuItem(0,"SUBMENU");
     lcd.begin(16, 2);
     menu.setRootMenuItem(root);
+    menu.setTransition(EasyLCDMenuPushTransition);
     root->add(new NumberMenuItem(&var1, "VAR1", -2, 5));
     root->add(new TrueFalseMenuItem(&bool1, "BOOL2"));
 
